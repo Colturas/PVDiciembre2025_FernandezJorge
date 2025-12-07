@@ -7,6 +7,7 @@ import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { PatientDashboard } from './components/PatientDashboard';
 import { DoctorDashboard } from './components/DoctorDashboard';
+import { NotFound, UnauthorizedAccess } from './components/ErrorPages';
 import './App.css';
 
 function App() {
@@ -34,7 +35,9 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/not-found" element={<NotFound />} />
+            <Route path="/unauthorized" element={<UnauthorizedAccess />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AppointmentProvider>
       </AuthProvider>

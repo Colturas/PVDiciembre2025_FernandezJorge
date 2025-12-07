@@ -1,11 +1,17 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { UnauthorizedAccess } from './ErrorPages';
 
 export const PrivateRoute = ({ children, requiredRole }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div className="loading">Cargando...</div>;
+    return (
+      <div className="loading">
+        <div className="spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    );
   }
 
   if (!user) {
@@ -13,7 +19,7 @@ export const PrivateRoute = ({ children, requiredRole }) => {
   }
 
   if (requiredRole && user.userType !== requiredRole) {
-    return <Navigate to="/login" replace />;
+    return <UnauthorizedAccess />;
   }
 
   return children;

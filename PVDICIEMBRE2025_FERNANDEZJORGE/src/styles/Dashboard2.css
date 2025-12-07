@@ -1,0 +1,269 @@
+.dashboard {
+  min-height: 100vh;
+  background-color: #f0f7ff;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(15, 52, 96, 0.2);
+}
+
+.dashboard-header h1 {
+  font-size: 28px;
+}
+
+.user-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn-logout {
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-logout:hover {
+  background-color: rgba(255, 51, 102, 0.7);
+  border-color: rgba(255, 51, 102, 1);
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(15, 52, 96, 0.1);
+  border-top: 4px solid #00bcd4;
+}
+
+.section h2 {
+  margin-bottom: 20px;
+  color: #0f3460;
+  font-size: 24px;
+  border-bottom: 2px solid #e0f7ff;
+  padding-bottom: 15px;
+}
+
+.info-card {
+  background-color: #f0f7ff;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #00bcd4;
+}
+
+.info-card p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.info-card strong {
+  color: #0f3460;
+}
+
+.book-form {
+  background-color: #f0f7ff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #e0f7ff;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #0f3460;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0f7ff;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #00bcd4;
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.slot-button {
+  padding: 12px;
+  border: 2px solid #e0f7ff;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #0f3460;
+  transition: all 0.3s;
+}
+
+.slot-button:hover {
+  border-color: #00bcd4;
+  background-color: #e0f7ff;
+}
+
+.slot-button.selected {
+  background-color: #00bcd4;
+  color: white;
+  border-color: #0097a7;
+}
+
+.appointment-preview {
+  background-color: #d1fae5;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #10b981;
+  margin-top: 20px;
+}
+
+.appointment-preview h3 {
+  margin-bottom: 15px;
+  color: #059669;
+}
+
+.appointment-preview p {
+  margin: 8px 0;
+  color: #047857;
+}
+
+.appointment-preview button {
+  margin-right: 10px;
+  margin-top: 15px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 16px;
+}
+
+.appointments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.appointment-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #00bcd4;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(15, 52, 96, 0.1);
+}
+
+.appointment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 188, 212, 0.2);
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.appointment-card h3 {
+  margin: 0;
+  color: #0f3460;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background-color: #d1fae5;
+  color: #059669;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.appointment-card p {
+  margin: 10px 0;
+  color: #666;
+}
+
+.btn-download,
+.btn-danger {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.btn-download {
+  background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+  color: white;
+}
+
+.btn-download:hover {
+  background: linear-gradient(135deg, #00acc1 0%, #00838f 100%);
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .dashboard-content {
+    padding: 20px 10px;
+  }
+
+  .section {
+    padding: 20px;
+  }
+
+  .appointments-list {
+    grid-template-columns: 1fr;
+  }
+}

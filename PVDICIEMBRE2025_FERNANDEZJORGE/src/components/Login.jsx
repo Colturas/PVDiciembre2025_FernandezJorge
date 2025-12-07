@@ -11,7 +11,7 @@ export const Login = () => {
   const { validateLogin } = useUsers();
   const [globalError, setGlobalError] = useState('');
 
-  const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldError } = useForm(
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldError, isSubmitting } = useForm(
     { email: '', password: '' },
     (formValues) => {
       setGlobalError('');
@@ -76,8 +76,8 @@ export const Login = () => {
             {touched.password && errors.password && <span className="field-error">{errors.password}</span>}
           </div>
 
-          <button type="submit" className="btn-primary">
-            Ingresar
+          <button type="submit" className="btn-primary" disabled={errors.email || errors.password}>
+            {isSubmitting ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
 
