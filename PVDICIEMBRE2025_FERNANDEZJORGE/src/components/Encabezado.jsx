@@ -18,7 +18,7 @@ export const Encabezado = () => {
     <header className="header">
       <div className="header-container">
         <div className="logo-section" onClick={() => navegar('/')} style={{ cursor: 'pointer' }}>
-          <div className="logo-icon">🏥</div>
+          <div className="logo-icon">+</div>
           <div className="logo-text">
             <h1>MediCare+</h1>
             <p>Centro Médico Integral</p>

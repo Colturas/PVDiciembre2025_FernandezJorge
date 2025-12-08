@@ -6,6 +6,74 @@ import { useTurnos } from '../context/ContextoTurnos';
 import { useMedicos, useTurnosMatutinos } from '../hooks/useDatos';
 import '../styles/Dashboard.css';
 
+const descargarPDF = (turno) => {
+  const contenido = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Comprobante de Cita - ${turno.nombreMedico}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #0f3460 0%, #16213e 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 700; }
+        .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 25px; }
+        .section h2 { color: #0f3460; border-bottom: 3px solid #00bcd4; padding-bottom: 10px; margin: 0 0 15px 0; font-size: 16px; font-weight: 600; }
+        .field { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .label { font-weight: 600; color: #0f3460; }
+        .value { color: #666; text-align: right; }
+        .status { background: linear-gradient(135deg, rgba(0, 137, 123, 0.1) 0%, rgba(0, 188, 212, 0.1) 100%); padding: 15px; border-radius: 6px; border-left: 4px solid #00897b; }
+        .status-label { font-weight: 600; color: #00897b; }
+        .footer { text-align: center; color: #999; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; }
+        .footer p { margin: 5px 0; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>MediCare+</h1>
+          <p>Centro Médico Integral</p>
+          <p style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px; font-size: 16px; font-weight: 600;">Comprobante de Cita Médica</p>
+        </div>
+        <div class="content">
+          <div class="section">
+            <h2>Información del Paciente</h2>
+            <div class="field"><span class="label">Nombre:</span><span class="value">${turno.nombrePaciente}</span></div>
+            <div class="field"><span class="label">Email:</span><span class="value">${turno.emailPaciente}</span></div>
+            <div class="field"><span class="label">DNI:</span><span class="value">${turno.dniPaciente}</span></div>
+            <div class="field"><span class="label">Edad:</span><span class="value">${turno.edadPaciente} años</span></div>
+          </div>
+          <div class="section">
+            <h2>Detalles de la Cita</h2>
+            <div class="field"><span class="label">Médico:</span><span class="value">Dr/a. ${turno.nombreMedico}</span></div>
+            <div class="field"><span class="label">Especialidad:</span><span class="value">${turno.especialidadMedico}</span></div>
+            <div class="field"><span class="label">Fecha:</span><span class="value">${turno.fecha}</span></div>
+            <div class="field"><span class="label">Hora:</span><span class="value">${turno.hora}</span></div>
+            <div class="field"><span class="label">Email Médico:</span><span class="value">${turno.emailMedico}</span></div>
+          </div>
+          <div class="status">
+            <span class="status-label">✓ Estado: CONFIRMADO</span>
+          </div>
+        </div>
+        <div class="footer">
+          <p>Comprobante generado el ${new Date().toLocaleString('es-AR')}</p>
+          <p>MediCare+ - Centro Médico Integral © 2025</p>
+          <p>Este documento es válido como comprobante de su cita programada</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  const ventana = window.open('', '', 'height=700,width=900');
+  ventana.document.write(contenido);
+  ventana.document.close();
+  setTimeout(() => ventana.print(), 500);
+};
+
 export const PanelPaciente = () => {
   const navegar = useNavigate();
   const { usuario } = useAutenticacion();
@@ -108,7 +176,7 @@ export const PanelPaciente = () => {
           </section>
 
           <div className="section">
-            <h2>📋 Datos Personales</h2>
+            <h2>Datos Personales</h2>
             <div className="info-card">
               <p><strong>Nombre:</strong> {usuario?.nombre}</p>
               <p><strong>Email:</strong> {usuario?.email}</p>
@@ -119,10 +187,10 @@ export const PanelPaciente = () => {
           </div>
 
           <div className="section">
-            <h2>📅 Agendar Turno</h2>
+            <h2>Agendar Turno</h2>
             {!mostrarFormulario ? (
               <button onClick={() => setMostrarFormulario(true)} className="btn-primary">
-                ➕ Agendar Nuevo Turno
+                + Agendar Nuevo Turno
               </button>
             ) : (
               <div className="book-form">
@@ -169,14 +237,14 @@ export const PanelPaciente = () => {
 
                 {medicoSeleccionado && horarioSeleccionado && (
                   <div className="appointment-preview">
-                    <h3>✓ Resumen del Turno</h3>
+                    <h3>Resumen del Turno</h3>
                     <p><strong>Médico:</strong> {medicoSeleccionado.nombre}</p>
                     <p><strong>Especialidad:</strong> {medicoSeleccionado.especialidad}</p>
                     <p><strong>Experiencia:</strong> {medicoSeleccionado.experiencia} años</p>
                     <p><strong>Fecha:</strong> {new Date().toLocaleDateString('es-AR')}</p>
                     <p><strong>Hora:</strong> {horarioSeleccionado}</p>
                     <button onClick={manejarAgendamiento} className="btn-primary">
-                      ✓ Confirmar Turno
+                      Confirmar Turno
                     </button>
                     <button onClick={() => setMostrarFormulario(false)} className="btn-secondary">
                       Cancelar
@@ -188,7 +256,7 @@ export const PanelPaciente = () => {
           </div>
 
           <div className="section">
-            <h2>📌 Mis Turnos</h2>
+            <h2>Mis Turnos</h2>
             {turnos.length === 0 ? (
               <p className="empty-state">No tienes turnos agendados aún. ¡Agenda tu primer turno ahora!</p>
             ) : (
@@ -198,13 +266,13 @@ export const PanelPaciente = () => {
                     <div className="appointment-header">
                       <h3>Dr/a. {turno.nombreMedico}</h3>
                       <span className={`status-badge ${turno.estado === 'cancelado' ? 'cancelado' : ''}`}>
-                        {turno.estado === 'cancelado' ? '✗ Cancelado' : '✓ Confirmado'}
+                        {turno.estado === 'cancelado' ? 'Cancelado' : 'Confirmado'}
                       </span>
                     </div>
                     <p><strong>Especialidad:</strong> {turno.especialidadMedico}</p>
-                    <p><strong>📅 Fecha:</strong> {turno.fecha}</p>
-                    <p><strong>🕐 Hora:</strong> {turno.hora}</p>
-                    <p><strong>📧 Email del médico:</strong> {turno.emailMedico}</p>
+                    <p><strong>Fecha:</strong> {turno.fecha}</p>
+                    <p><strong>Hora:</strong> {turno.hora}</p>
+                    <p><strong>Email del médico:</strong> {turno.emailMedico}</p>
                     {turno.estado === 'cancelado' && turno.motivoCancelacion && (
                       <p style={{ color: '#d32f2f', fontStyle: 'italic' }}>
                         <strong>Motivo de cancelación:</strong> {turno.motivoCancelacion}
@@ -215,10 +283,15 @@ export const PanelPaciente = () => {
                         className="btn-danger"
                         onClick={() => setMostrarDialogoCancelacion(turno.id)}
                       >
-                        🗑️ Cancelar Turno
+                        Cancelar Turno
                       </button>
                     )}
-                    <button className="btn-download">📥 Descargar PDF</button>
+                    <button 
+                      className="btn-download"
+                      onClick={() => descargarPDF(turno)}
+                    >
+                      Descargar PDF
+                    </button>
                   </div>
                 ))}
               </div>

@@ -259,6 +259,13 @@ export const Registrarse = () => {
         <p className="auth-footer">
           ¿Ya tienes cuenta? <a href="/iniciar-sesion">Inicia sesión aquí</a>
         </p>
+        <button 
+          type="button"
+          onClick={() => navegar('/')}
+          className="btn-volver"
+        >
+          Volver al Inicio
+        </button>
       </div>
     </div>
   );

@@ -52,13 +52,13 @@ export const PanelMedico = () => {
           {/* Sección de Bienvenida */}
           <section className="section welcome-section">
             <div className="welcome-content">
-              <h2>Bienvenido, Dr/a. {usuario?.nombre} 👨‍⚕️</h2>
+              <h2>Bienvenido, Dr/a. {usuario?.nombre}</h2>
               <p>Gestiona tus citas y atiende a tus pacientes en MediCare+</p>
             </div>
           </section>
 
           <div className="section">
-            <h2>🏥 Datos Profesionales</h2>
+            <h2>Datos Profesionales</h2>
             <div className="info-card">
               <p><strong>Nombre:</strong> Dr/a. {usuario?.nombre}</p>
               <p><strong>Email:</strong> {usuario?.email}</p>
@@ -66,7 +66,7 @@ export const PanelMedico = () => {
               <p><strong>Especialidad:</strong> {usuario?.especialidad}</p>
               <p><strong>Teléfono:</strong> {usuario?.telefono}</p>
               <p><strong>Estado:</strong> <span style={{ color: disponible ? '#00897b' : '#d32f2f', fontWeight: 'bold' }}>
-                {disponible ? '✓ Disponible' : '✗ No Disponible'}
+                {disponible ? 'Disponible' : 'No Disponible'}
               </span></p>
             </div>
             <button 
@@ -74,13 +74,13 @@ export const PanelMedico = () => {
               className={disponible ? 'btn-danger' : 'btn-primary'}
               style={{ marginTop: '15px' }}
             >
-              {disponible ? '🔴 Marcar como No Disponible' : '🟢 Marcar como Disponible'}
+              {disponible ? 'Marcar como No Disponible' : 'Marcar como Disponible'}
             </button>
-            {mensajeExito && <p style={{ color: '#00897b', marginTop: '10px', fontWeight: 'bold' }}>✓ {mensajeExito}</p>}
+            {mensajeExito && <p style={{ color: '#00897b', marginTop: '10px', fontWeight: 'bold' }}>{mensajeExito}</p>}
           </div>
 
           <div className="section">
-            <h2>📋 Turnos Agendados</h2>
+            <h2>Turnos Agendados</h2>
             {turnos.filter(t => t.estado !== 'cancelado').length === 0 ? (
               <p className="empty-state">No hay turnos agendados en este momento. Tus pacientes podrán agendar citas pronto.</p>
             ) : (
@@ -89,18 +89,18 @@ export const PanelMedico = () => {
                   <div key={turno.id} className="appointment-card">
                     <div className="appointment-header">
                       <h3>Paciente: {turno.nombrePaciente}</h3>
-                      <span className="status-badge">✓ {turno.estado}</span>
+                      <span className="status-badge">Confirmado</span>
                     </div>
-                    <p><strong>📧 Email:</strong> {turno.emailPaciente}</p>
-                    <p><strong>📄 DNI:</strong> {turno.dniPaciente}</p>
-                    <p><strong>👤 Edad:</strong> {turno.edadPaciente} años</p>
-                    <p><strong>📅 Fecha:</strong> {turno.fecha}</p>
-                    <p><strong>🕐 Hora:</strong> {turno.hora}</p>
+                    <p><strong>Email:</strong> {turno.emailPaciente}</p>
+                    <p><strong>DNI:</strong> {turno.dniPaciente}</p>
+                    <p><strong>Edad:</strong> {turno.edadPaciente} años</p>
+                    <p><strong>Fecha:</strong> {turno.fecha}</p>
+                    <p><strong>Hora:</strong> {turno.hora}</p>
                     <button 
                       onClick={() => setMostrarDialogoCancelacion(turno.id)}
                       className="btn-danger"
                     >
-                      ✕ Cancelar Turno
+                      Cancelar Turno
                     </button>
                   </div>
                 ))}

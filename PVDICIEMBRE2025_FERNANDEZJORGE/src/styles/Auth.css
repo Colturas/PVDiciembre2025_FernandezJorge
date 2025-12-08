@@ -199,3 +199,23 @@
     font-size: 24px;
   }
 }
+
+.btn-volver {
+  width: 100%;
+  padding: 12px;
+  background-color: transparent;
+  color: var(--accent-cyan);
+  border: 2px solid var(--accent-cyan);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s;
+}
+
+.btn-volver:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}

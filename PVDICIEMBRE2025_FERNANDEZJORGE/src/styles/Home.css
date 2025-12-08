@@ -5,9 +5,9 @@
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-  color: white;
-  padding: 80px 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  color: rgb(43, 43, 43);
+  padding: 170px 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
@@ -25,7 +25,7 @@
 
 .hero-content p {
   font-size: 18px;
-  color: #a0c4ff;
+  color: #000000;
   margin-bottom: 30px;
   line-height: 1.6;
 }
@@ -61,7 +61,7 @@
 
 .btn-secondary-large {
   background: rgba(255, 255, 255, 0.15);
-  color: white;
+  color: rgb(0, 0, 0);
   border: 2px solid #00bcd4;
 }
 
@@ -77,8 +77,7 @@
 }
 
 .medical-icon {
-  font-size: 120px;
-  animation: float 3s ease-in-out infinite;
+  font-size: 200px;
 }
 
 @keyframes float {

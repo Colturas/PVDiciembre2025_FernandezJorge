@@ -84,6 +84,13 @@ export const IniciarSesion = () => {
         <p className="auth-footer">
           ¿No tienes cuenta? <a href="/registrarse">Regístrate aquí</a>
         </p>
+        <button 
+          type="button"
+          onClick={() => navegar('/')}
+          className="btn-volver"
+        >
+          Volver al Inicio
+        </button>
       </div>
     </div>
   );
