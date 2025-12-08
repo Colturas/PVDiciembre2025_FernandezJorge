@@ -2,16 +2,21 @@ import { useState, useEffect } from 'react';
 import { Encabezado } from './Encabezado';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { useTurnos } from '../context/ContextoTurnos';
+import { useUsuarios } from '../hooks/useDatos';
 import '../styles/Dashboard.css';
 
 export const PanelMedico = () => {
   const { usuario } = useAutenticacion();
   const { obtenerTurnosPorMedico, cancelarTurno, cambiarDisponibilidad, estaDisponible } = useTurnos();
+  const { actualizarObra } = useUsuarios();
   const [turnos, setTurnos] = useState([]);
   const [disponible, setDisponible] = useState(true);
   const [mostrarDialogoCancelacion, setMostrarDialogoCancelacion] = useState(null);
   const [motivoCancelacion, setMotivoCancelacion] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
+  const [mostrarCambioObra, setMostrarCambioObra] = useState(false);
+  const [nuevaObra, setNuevaObra] = useState(usuario?.obraSocial || 'PAMI');
+  const [motivoCambioObra, setMotivoCambioObra] = useState('');
 
   useEffect(() => {
     setTurnos(obtenerTurnosPorMedico(usuario?.email));
@@ -44,6 +49,19 @@ export const PanelMedico = () => {
     }
   };
 
+  const manejarCambioObraSocial = () => {
+    if (!motivoCambioObra.trim()) {
+      alert('Por favor ingresa un motivo para el cambio de obra social.');
+      return;
+    }
+    actualizarObra(usuario?.id, nuevaObra, motivoCambioObra);
+    setMensajeExito('Obra social actualizada correctamente.');
+    setMostrarCambioObra(false);
+    setMotivoCambioObra('');
+    setTimeout(() => setMensajeExito(''), 3000);
+    window.location.reload();
+  };
+
   return (
     <>
       <Encabezado />
@@ -73,9 +91,16 @@ export const PanelMedico = () => {
             <button 
               onClick={manejarCambioDisponibilidad}
               className={disponible ? 'btn-danger' : 'btn-primary'}
-              style={{ marginTop: '15px' }}
+              style={{ marginTop: '15px', marginRight: '10px' }}
             >
               {disponible ? 'Marcar como No Disponible' : 'Marcar como Disponible'}
+            </button>
+            <button 
+              onClick={() => setMostrarCambioObra(true)}
+              className="btn-primary"
+              style={{ marginTop: '15px' }}
+            >
+              Cambiar Obra Social
             </button>
             {mensajeExito && <p style={{ color: '#00897b', marginTop: '10px', fontWeight: 'bold' }}>{mensajeExito}</p>}
           </div>
@@ -135,6 +160,54 @@ export const PanelMedico = () => {
                     className="btn-danger"
                   >
                     Sí, cancelar turno
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {mostrarCambioObra && (
+            <div className="modal-overlay" onClick={() => setMostrarCambioObra(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2>Cambiar Obra Social</h2>
+                <p>Obra Social Actual: <strong>{usuario?.obraSocial}</strong></p>
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label>Nueva Obra Social</label>
+                  <select
+                    value={nuevaObra}
+                    onChange={(e) => setNuevaObra(e.target.value)}
+                    style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ddd' }}
+                  >
+                    <option value="PAMI">PAMI</option>
+                    <option value="ISJ">ISJ</option>
+                    <option value="OSDE">OSDE</option>
+                  </select>
+                </div>
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label>Motivo del Cambio</label>
+                  <textarea
+                    value={motivoCambioObra}
+                    onChange={(e) => setMotivoCambioObra(e.target.value)}
+                    placeholder="Ej: Cambio de afiliación, mejor cobertura, etc..."
+                    style={{ width: '100%', minHeight: '80px', padding: '10px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                  <button 
+                    onClick={() => {
+                      setMostrarCambioObra(false);
+                      setMotivoCambioObra('');
+                      setNuevaObra(usuario?.obraSocial);
+                    }}
+                    className="btn-secondary"
+                  >
+                    Cancelar
+                  </button>
+                  <button 
+                    onClick={manejarCambioObraSocial}
+                    className="btn-primary"
+                  >
+                    Confirmar Cambio
                   </button>
                 </div>
               </div>
