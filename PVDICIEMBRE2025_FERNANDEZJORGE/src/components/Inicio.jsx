@@ -38,8 +38,6 @@ export const Inicio = () => {
             <div className="medical-icon">+</div>
           </div>
         </section>
-
-        
       </div>
     </>
   );
