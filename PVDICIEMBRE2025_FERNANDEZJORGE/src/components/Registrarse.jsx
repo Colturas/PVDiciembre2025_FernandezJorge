@@ -103,7 +103,7 @@ export const Registrarse = () => {
         <form onSubmit={manejarEnvio}>
           <div className="form-row">
             <div className="form-group half">
-              <label htmlFor="nombre">Nombre Completo</label>
+              <label htmlFor="nombre">Nombre</label>
               <input
                 id="nombre"
                 type="text"
