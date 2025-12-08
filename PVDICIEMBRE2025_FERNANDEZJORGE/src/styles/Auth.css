@@ -16,8 +16,7 @@
   justify-content: center;
   align-items: flex-start;
   background: linear-gradient(to bottom, #ffffff 0%, #f0f7ff 100%);
-  padding: 40px 450px;
-  padding-top: 60px;
+  padding: 60px 590px;
 }
 
 .auth-card {
@@ -26,19 +25,21 @@
   box-shadow: 0 20px 60px rgba(15, 52, 96, 0.15);
   padding: 50px;
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
   border-top: 5px solid var(--accent-cyan);
 }
 
 .auth-card.register-card {
-  max-width: 900px !important;
+  max-width: 1000px !important;
 }
 
 .auth-card h1 {
   text-align: center;
   margin-bottom: 30px;
+  
+  margin-right: 100px;
   color: var(--primary-dark);
-  font-size: 32px;
+  font-size: 50px;
   font-weight: 700;
 }
 
@@ -173,6 +174,12 @@
 
 .auth-footer a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .auth-card.register-card {
+    max-width: 700px !important;
+  }
 }
 
 @media (max-width: 600px) {

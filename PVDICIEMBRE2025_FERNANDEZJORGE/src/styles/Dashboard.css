@@ -7,6 +7,11 @@
   margin-bottom: 30px;
 }
 
+.welcome-content {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .welcome-content h2 {
   color: var(--white);
   border: none;
@@ -16,8 +21,8 @@
 }
 
 .welcome-section p {
-  color: var(--text-dark);
-  font-size: 18px;
+  color: var(--text-light);
+  font-size: 50px;
   margin: 0;
 }
 
@@ -29,7 +34,7 @@
 .dashboard-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 125px;
 }
 
 .section {
