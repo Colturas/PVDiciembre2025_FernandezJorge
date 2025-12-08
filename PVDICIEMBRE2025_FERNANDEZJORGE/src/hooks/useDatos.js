@@ -34,6 +34,7 @@ const USUARIOS_POR_DEFECTO = [
     dni: '12345678',
     telefono: '+54 9 11 5555-1111',
     especialidad: 'Cardiología',
+    obraSocial: 'PAMI',
     creadoEn: new Date().toISOString(),
   },
   {
@@ -45,6 +46,7 @@ const USUARIOS_POR_DEFECTO = [
     dni: '12345679',
     telefono: '+54 9 11 5555-2222',
     especialidad: 'Neurología',
+    obraSocial: 'ISJ',
     creadoEn: new Date().toISOString(),
   },
   {
@@ -56,6 +58,7 @@ const USUARIOS_POR_DEFECTO = [
     dni: '12345680',
     telefono: '+54 9 11 5555-3333',
     especialidad: 'Dermatología',
+    obraSocial: 'OSDE',
     creadoEn: new Date().toISOString(),
   },
   {
@@ -67,6 +70,7 @@ const USUARIOS_POR_DEFECTO = [
     dni: '30123456',
     telefono: '+54 9 11 6666-1111',
     edad: 35,
+    obraSocial: 'PAMI',
     creadoEn: new Date().toISOString(),
   },
 ];
@@ -135,16 +139,37 @@ export const useUsuarios = () => {
     return usuarios.find(u => u.email === email);
   };
 
+  const buscarUsuarioPorDNI = (dni) => {
+    return usuarios.find(u => u.dni === dni);
+  };
+
+  const buscarUsuarioPorTelefono = (telefono) => {
+    return usuarios.find(u => u.telefono === telefono);
+  };
+
   const validarInicioSesion = (email, contrasena) => {
     const usuario = usuarios.find(u => u.email === email && u.contrasena === contrasena);
     return usuario || null;
+  };
+
+  const actualizarObra = (usuarioId, nuevaObra, motivo) => {
+    const usuariosActualizados = usuarios.map(u => 
+      u.id === usuarioId 
+        ? { ...u, obraSocial: nuevaObra, cambioObraMotivo: motivo, cambioObraFecha: new Date().toISOString() }
+        : u
+    );
+    setUsuarios(usuariosActualizados);
+    localStorage.setItem('usuarios', JSON.stringify(usuariosActualizados));
   };
 
   return {
     usuarios,
     agregarUsuario,
     buscarUsuarioPorEmail,
+    buscarUsuarioPorDNI,
+    buscarUsuarioPorTelefono,
     validarInicioSesion,
+    actualizarObra,
     inicializado,
   };
 };

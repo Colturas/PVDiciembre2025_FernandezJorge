@@ -65,6 +65,7 @@ export const PanelMedico = () => {
               <p><strong>DNI:</strong> {usuario?.dni}</p>
               <p><strong>Especialidad:</strong> {usuario?.especialidad}</p>
               <p><strong>Teléfono:</strong> {usuario?.telefono}</p>
+              <p><strong>Obra Social:</strong> {usuario?.obraSocial}</p>
               <p><strong>Estado:</strong> <span style={{ color: disponible ? '#00897b' : '#d32f2f', fontWeight: 'bold' }}>
                 {disponible ? 'Disponible' : 'No Disponible'}
               </span></p>

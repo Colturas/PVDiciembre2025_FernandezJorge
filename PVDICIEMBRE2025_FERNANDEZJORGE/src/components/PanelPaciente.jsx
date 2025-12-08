@@ -183,6 +183,7 @@ export const PanelPaciente = () => {
               <p><strong>DNI:</strong> {usuario?.dni}</p>
               <p><strong>Edad:</strong> {usuario?.edad} años</p>
               <p><strong>Teléfono:</strong> {usuario?.telefono}</p>
+              <p><strong>Obra Social:</strong> {usuario?.obraSocial}</p>
             </div>
           </div>
 
@@ -195,7 +196,7 @@ export const PanelPaciente = () => {
             ) : (
               <div className="book-form">
                 <div className="form-group">
-                  <label>Selecciona un Médico</label>
+                  <label>Selecciona un Médico (Obra Social: {usuario?.obraSocial})</label>
                   <select
                     value={medicoSeleccionado?.id || ''}
                     onChange={(e) => {
@@ -204,11 +205,13 @@ export const PanelPaciente = () => {
                     }}
                   >
                     <option value="">-- Selecciona un médico --</option>
-                    {medicos.map(medico => (
-                      <option key={medico.id} value={medico.id}>
-                        {medico.nombre} - {medico.especialidad}
-                      </option>
-                    ))}
+                    {medicos
+                      .filter(medico => medico.obraSocial === usuario?.obraSocial)
+                      .map(medico => (
+                        <option key={medico.id} value={medico.id}>
+                          {medico.nombre} - {medico.especialidad}
+                        </option>
+                      ))}
                   </select>
                 </div>
 

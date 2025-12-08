@@ -8,7 +8,7 @@ import '../styles/Auth.css';
 export const Registrarse = () => {
   const navegar = useNavigate();
   const { registrarse } = useAutenticacion();
-  const { agregarUsuario, buscarUsuarioPorEmail } = useUsuarios();
+  const { agregarUsuario, buscarUsuarioPorEmail, buscarUsuarioPorDNI, buscarUsuarioPorTelefono } = useUsuarios();
   const [errorGlobal, setErrorGlobal] = useState('');
 
   const { valores, errores, tocados, manejarCambio, manejarDesenfoque, manejarEnvio, establecerErrorCampo } = useFormulario(
@@ -22,6 +22,7 @@ export const Registrarse = () => {
       telefono: '',
       edad: '',
       especialidad: '',
+      obraSocial: 'PAMI',
     },
     (valoresFormulario) => {
       setErrorGlobal('');
@@ -55,9 +56,15 @@ export const Registrarse = () => {
       if (!valoresFormulario.dni.trim()) {
         establecerErrorCampo('dni', 'El DNI es requerido');
         hayErrores = true;
+      } else if (buscarUsuarioPorDNI(valoresFormulario.dni)) {
+        establecerErrorCampo('dni', 'Este DNI ya está registrado');
+        hayErrores = true;
       }
       if (!valoresFormulario.telefono.trim()) {
         establecerErrorCampo('telefono', 'El teléfono es requerido');
+        hayErrores = true;
+      } else if (buscarUsuarioPorTelefono(valoresFormulario.telefono)) {
+        establecerErrorCampo('telefono', 'Este teléfono ya está registrado');
         hayErrores = true;
       }
 
@@ -82,6 +89,7 @@ export const Registrarse = () => {
           tipoUsuario: valoresFormulario.tipoUsuario,
           dni: valoresFormulario.dni,
           telefono: valoresFormulario.telefono,
+          obraSocial: valoresFormulario.obraSocial,
           ...(valoresFormulario.tipoUsuario === 'paciente' && { edad: valoresFormulario.edad }),
           ...(valoresFormulario.tipoUsuario === 'medico' && { especialidad: valoresFormulario.especialidad }),
           creadoEn: new Date().toISOString(),
@@ -176,6 +184,20 @@ export const Registrarse = () => {
               />
               {tocados.telefono && errores.telefono && <span className="field-error">{errores.telefono}</span>}
             </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="obraSocial">Obra Social</label>
+            <select
+              id="obraSocial"
+              name="obraSocial"
+              value={valores.obraSocial}
+              onChange={manejarCambio}
+            >
+              <option value="PAMI">PAMI</option>
+              <option value="ISJ">ISJ</option>
+              <option value="OSDE">OSDE</option>
+            </select>
           </div>
 
           {valores.tipoUsuario === 'paciente' && (
