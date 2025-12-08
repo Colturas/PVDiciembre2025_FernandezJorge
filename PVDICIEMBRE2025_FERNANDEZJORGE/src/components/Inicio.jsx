@@ -1,36 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { Encabezado } from './Encabezado';
+import { useAutenticacion } from '../context/ContextoAutenticacion';
 import '../styles/Home.css';
 
 export const Inicio = () => {
   const navegar = useNavigate();
-
-  const medicos = [
-    {
-      id: 1,
-      nombre: 'Dr. Juan García',
-      especialidad: 'Cardiología',
-      experiencia: 15,
-      email: 'dr.juan@medicare.com',
-      imagen: '👨‍⚕️',
-    },
-    {
-      id: 2,
-      nombre: 'Dra. María López',
-      especialidad: 'Neurología',
-      experiencia: 12,
-      email: 'dra.maria@medicare.com',
-      imagen: '👩‍⚕️',
-    },
-    {
-      id: 3,
-      nombre: 'Dr. Carlos Rodríguez',
-      especialidad: 'Dermatología',
-      experiencia: 10,
-      email: 'dr.carlos@medicare.com',
-      imagen: '👨‍⚕️',
-    },
-  ];
+  const { usuario } = useAutenticacion();
 
   return (
     <>
@@ -41,14 +16,22 @@ export const Inicio = () => {
           <div className="hero-content">
             <h1>Centro Médico Integral MediCare+</h1>
             <p>Tu salud es nuestra prioridad. Agenda tus consultas de forma rápida y segura.</p>
-            <div className="hero-buttons">
-              <button onClick={() => navegar('/iniciar-sesion')} className="btn-primary-large">
-                Acceder Ahora
-              </button>
-              <button onClick={() => navegar('/registrarse')} className="btn-secondary-large">
-                Registrarse
-              </button>
-            </div>
+            {!usuario ? (
+              <div className="hero-buttons">
+                <button onClick={() => navegar('/iniciar-sesion')} className="btn-primary-large">
+                  Acceder Ahora
+                </button>
+                <button onClick={() => navegar('/registrarse')} className="btn-secondary-large">
+                  Registrarse
+                </button>
+              </div>
+            ) : (
+              <div className="hero-buttons">
+                <button onClick={() => navegar(usuario.tipoUsuario === 'paciente' ? '/panel-paciente' : '/panel-medico')} className="btn-primary-large">
+                  Ir a Mi Panel
+                </button>
+              </div>
+            )}
           </div>
           <div className="hero-image">
             <div className="medical-icon">🏥</div>
@@ -98,59 +81,6 @@ export const Inicio = () => {
               </div>
             </div>
           </div>
-        </section>
-
-        {/* Sección Médicos */}
-        <section className="doctors-section">
-          <h2>Nuestros Médicos</h2>
-          <p className="section-subtitle">Conoce a nuestro equipo de profesionales especializados</p>
-          <div className="doctors-grid">
-            {medicos.map(medico => (
-              <div key={medico.id} className="doctor-card">
-                <div className="doctor-image">{medico.imagen}</div>
-                <h3>{medico.nombre}</h3>
-                <p className="specialty">{medico.especialidad}</p>
-                <p className="experience">{medico.experiencia} años de experiencia</p>
-                <p className="email">{medico.email}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Sección Servicios */}
-        <section className="services-section">
-          <h2>Servicios</h2>
-          <div className="services-grid">
-            <div className="service-card">
-              <div className="service-icon">🔍</div>
-              <h3>Consultas Generales</h3>
-              <p>Evaluación médica completa con nuestros especialistas</p>
-            </div>
-            <div className="service-card">
-              <div className="service-icon">📋</div>
-              <h3>Diagnósticos</h3>
-              <p>Estudios y análisis con tecnología de punta</p>
-            </div>
-            <div className="service-card">
-              <div className="service-icon">💊</div>
-              <h3>Tratamientos</h3>
-              <p>Planes de tratamiento personalizados</p>
-            </div>
-            <div className="service-card">
-              <div className="service-icon">🏥</div>
-              <h3>Seguimiento</h3>
-              <p>Control y seguimiento de tu salud</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Sección CTA */}
-        <section className="cta-section">
-          <h2>¿Listo para cuidar tu salud?</h2>
-          <p>Agenda tu cita ahora mismo</p>
-          <button onClick={() => navegar('/registrarse')} className="btn-primary-large">
-            Comenzar Ahora
-          </button>
         </section>
 
         {/* Pie de página */}

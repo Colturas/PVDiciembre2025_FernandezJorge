@@ -9,7 +9,7 @@ import '../styles/Dashboard.css';
 export const PanelPaciente = () => {
   const navegar = useNavigate();
   const { usuario } = useAutenticacion();
-  const { agregarTurno, obtenerTurnosPorPaciente } = useTurnos();
+  const { agregarTurno, obtenerTurnosPorPaciente, verificarDisponibilidad, obtenerHorariosDisponibles } = useTurnos();
   const medicos = useMedicos();
   const turnosMatutinos = useTurnosMatutinos();
   const [turnos, setTurnos] = useState([]);
@@ -17,13 +17,36 @@ export const PanelPaciente = () => {
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [mensajeExito, setMensajeExito] = useState('');
+  const [horariosDisponibles, setHorariosDisponibles] = useState([]);
 
   useEffect(() => {
     setTurnos(obtenerTurnosPorPaciente(usuario?.email));
   }, [usuario, obtenerTurnosPorPaciente]);
 
+  const manejarSeleccionMedico = (medico) => {
+    setMedicoSeleccionado(medico);
+    setHorarioSeleccionado(null);
+    const fecha = new Date().toLocaleDateString('es-AR');
+    const horariosDisp = obtenerHorariosDisponibles(medico.email, fecha, turnosMatutinos);
+    setHorariosDisponibles(horariosDisp);
+  };
+
+  const [mostrarDialogoCancelacion, setMostrarDialogoCancelacion] = useState(null);
+  const [motivoCancelacion, setMotivoCancelacion] = useState('');
+  const { cancelarTurno } = useTurnos();
+
   const manejarAgendamiento = () => {
     if (medicoSeleccionado && horarioSeleccionado) {
+      const fecha = new Date().toLocaleDateString('es-AR');
+      
+      // Verificar nuevamente disponibilidad antes de agendar
+      if (!verificarDisponibilidad(medicoSeleccionado.email, fecha, horarioSeleccionado)) {
+        alert('Lo siento, este horario ya no está disponible. Por favor selecciona otro.');
+        const horariosActualizados = obtenerHorariosDisponibles(medicoSeleccionado.email, fecha, turnosMatutinos);
+        setHorariosDisponibles(horariosActualizados);
+        return;
+      }
+
       const nuevoTurno = {
         id: Date.now(),
         nombrePaciente: usuario.nombre,
@@ -33,7 +56,7 @@ export const PanelPaciente = () => {
         nombreMedico: medicoSeleccionado.nombre,
         emailMedico: medicoSeleccionado.email,
         especialidadMedico: medicoSeleccionado.especialidad,
-        fecha: new Date().toLocaleDateString('es-AR'),
+        fecha: fecha,
         hora: horarioSeleccionado,
         estado: 'confirmado',
         creadoEn: new Date().toISOString(),
@@ -47,6 +70,25 @@ export const PanelPaciente = () => {
       setHorarioSeleccionado(null);
 
       setTimeout(() => setMensajeExito(''), 3000);
+    }
+  };
+
+  const manejarCancelacion = (turnoId) => {
+    if (motivoCancelacion.trim()) {
+      cancelarTurno(turnoId, motivoCancelacion);
+      setTurnos(prev => 
+        prev.map(t => 
+          t.id === turnoId 
+            ? { ...t, estado: 'cancelado', motivoCancelacion: motivoCancelacion }
+            : t
+        )
+      );
+      setMostrarDialogoCancelacion(null);
+      setMotivoCancelacion('');
+      setMensajeExito('Turno cancelado correctamente.');
+      setTimeout(() => setMensajeExito(''), 3000);
+    } else {
+      alert('Por favor ingresa un motivo para la cancelación.');
     }
   };
 
@@ -90,8 +132,7 @@ export const PanelPaciente = () => {
                     value={medicoSeleccionado?.id || ''}
                     onChange={(e) => {
                       const medico = medicos.find(m => m.id === parseInt(e.target.value));
-                      setMedicoSeleccionado(medico);
-                      setHorarioSeleccionado(null);
+                      manejarSeleccionMedico(medico);
                     }}
                   >
                     <option value="">-- Selecciona un médico --</option>
@@ -107,15 +148,21 @@ export const PanelPaciente = () => {
                   <div className="form-group">
                     <label>Selecciona una Hora (Mañana - {new Date().toLocaleDateString('es-AR')})</label>
                     <div className="slots-grid">
-                      {turnosMatutinos.map(horario => (
-                        <button
-                          key={horario}
-                          onClick={() => setHorarioSeleccionado(horario)}
-                          className={`slot-button ${horarioSeleccionado === horario ? 'selected' : ''}`}
-                        >
-                          {horario}
-                        </button>
-                      ))}
+                      {horariosDisponibles.length > 0 ? (
+                        horariosDisponibles.map(horario => (
+                          <button
+                            key={horario}
+                            onClick={() => setHorarioSeleccionado(horario)}
+                            className={`slot-button ${horarioSeleccionado === horario ? 'selected' : ''}`}
+                          >
+                            {horario}
+                          </button>
+                        ))
+                      ) : (
+                        <p style={{ gridColumn: '1 / -1', color: '#d32f2f', textAlign: 'center' }}>
+                          No hay horarios disponibles para esta fecha. Intenta con otro día.
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}
@@ -150,18 +197,65 @@ export const PanelPaciente = () => {
                   <div key={turno.id} className="appointment-card">
                     <div className="appointment-header">
                       <h3>Dr/a. {turno.nombreMedico}</h3>
-                      <span className="status-badge">✓ {turno.estado}</span>
+                      <span className={`status-badge ${turno.estado === 'cancelado' ? 'cancelado' : ''}`}>
+                        {turno.estado === 'cancelado' ? '✗ Cancelado' : '✓ Confirmado'}
+                      </span>
                     </div>
                     <p><strong>Especialidad:</strong> {turno.especialidadMedico}</p>
                     <p><strong>📅 Fecha:</strong> {turno.fecha}</p>
                     <p><strong>🕐 Hora:</strong> {turno.hora}</p>
                     <p><strong>📧 Email del médico:</strong> {turno.emailMedico}</p>
+                    {turno.estado === 'cancelado' && turno.motivoCancelacion && (
+                      <p style={{ color: '#d32f2f', fontStyle: 'italic' }}>
+                        <strong>Motivo de cancelación:</strong> {turno.motivoCancelacion}
+                      </p>
+                    )}
+                    {turno.estado === 'confirmado' && (
+                      <button 
+                        className="btn-danger"
+                        onClick={() => setMostrarDialogoCancelacion(turno.id)}
+                      >
+                        🗑️ Cancelar Turno
+                      </button>
+                    )}
                     <button className="btn-download">📥 Descargar PDF</button>
                   </div>
                 ))}
               </div>
             )}
           </div>
+
+          {mostrarDialogoCancelacion && (
+            <div className="modal-overlay" onClick={() => setMostrarDialogoCancelacion(null)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2>Cancelar Turno</h2>
+                <p>¿Estás seguro de que deseas cancelar este turno? Por favor indica el motivo:</p>
+                <textarea
+                  value={motivoCancelacion}
+                  onChange={(e) => setMotivoCancelacion(e.target.value)}
+                  placeholder="Ej: Motivo personal, cambio de disponibilidad, etc..."
+                  style={{ width: '100%', minHeight: '100px', padding: '10px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd' }}
+                />
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                  <button 
+                    onClick={() => {
+                      setMostrarDialogoCancelacion(null);
+                      setMotivoCancelacion('');
+                    }}
+                    className="btn-secondary"
+                  >
+                    No, mantener turno
+                  </button>
+                  <button 
+                    onClick={() => manejarCancelacion(mostrarDialogoCancelacion)}
+                    className="btn-danger"
+                  >
+                    Sí, cancelar turno
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -82,7 +82,19 @@ const TURNOS_MATUTINOS = [
 ];
 
 export const useMedicos = () => {
-  return MEDICOS;
+  const [medicos, setMedicos] = useState([]);
+
+  useEffect(() => {
+    // Cargar médicos desde usuarios registrados
+    const usuariosGuardados = localStorage.getItem('usuarios') || localStorage.getItem('users');
+    if (usuariosGuardados) {
+      const usuarios = JSON.parse(usuariosGuardados);
+      const medicosRegistrados = usuarios.filter(u => u.tipoUsuario === 'medico');
+      setMedicos(medicosRegistrados);
+    }
+  }, []);
+
+  return medicos;
 };
 
 export const useTurnosMatutinos = () => {

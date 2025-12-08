@@ -29,6 +29,14 @@ export const Encabezado = () => {
           {usuario ? (
             <div className="user-menu">
               <span className="user-name">Bienvenido, {usuario.nombre}</span>
+              {esEnInicio && (
+                <button 
+                  onClick={() => navegar(usuario.tipoUsuario === 'paciente' ? '/panel-paciente' : '/panel-medico')} 
+                  className="nav-btn"
+                >
+                  Mi Panel
+                </button>
+              )}
               <button onClick={manejarCierreSesion} className="nav-btn logout-btn">
                 Cerrar Sesión
               </button>
