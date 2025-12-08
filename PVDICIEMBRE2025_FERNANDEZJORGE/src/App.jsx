@@ -1,46 +1,46 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { AppointmentProvider } from './context/AppointmentContext';
-import { PrivateRoute } from './components/PrivateRoute';
-import { Home } from './components/Home';
-import { Login } from './components/Login';
-import { Register } from './components/Register';
-import { PatientDashboard } from './components/PatientDashboard';
-import { DoctorDashboard } from './components/DoctorDashboard';
-import { NotFound, UnauthorizedAccess } from './components/ErrorPages';
+import { ProveedorAutenticacion } from './context/ContextoAutenticacion';
+import { ProveedorTurnos } from './context/ContextoTurnos';
+import { RutaPrivada } from './components/RutaPrivada';
+import { Inicio } from './components/Inicio';
+import { IniciarSesion } from './components/IniciarSesion';
+import { Registrarse } from './components/Registrarse';
+import { PanelPaciente } from './components/PanelPaciente';
+import { PanelMedico } from './components/PanelMedico';
+import { NoEncontrado, AccesoNoAutorizado } from './components/PaginasError';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <AppointmentProvider>
+      <ProveedorAutenticacion>
+        <ProveedorTurnos>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Inicio />} />
+            <Route path="/iniciar-sesion" element={<IniciarSesion />} />
+            <Route path="/registrarse" element={<Registrarse />} />
             <Route
-              path="/patient-dashboard"
+              path="/panel-paciente"
               element={
-                <PrivateRoute requiredRole="paciente">
-                  <PatientDashboard />
-                </PrivateRoute>
+                <RutaPrivada rolRequerido="paciente">
+                  <PanelPaciente />
+                </RutaPrivada>
               }
             />
             <Route
-              path="/doctor-dashboard"
+              path="/panel-medico"
               element={
-                <PrivateRoute requiredRole="medico">
-                  <DoctorDashboard />
-                </PrivateRoute>
+                <RutaPrivada rolRequerido="medico">
+                  <PanelMedico />
+                </RutaPrivada>
               }
             />
-            <Route path="/not-found" element={<NotFound />} />
-            <Route path="/unauthorized" element={<UnauthorizedAccess />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/no-encontrado" element={<NoEncontrado />} />
+            <Route path="/acceso-no-autorizado" element={<AccesoNoAutorizado />} />
+            <Route path="*" element={<NoEncontrado />} />
           </Routes>
-        </AppointmentProvider>
-      </AuthProvider>
+        </ProveedorTurnos>
+      </ProveedorAutenticacion>
     </Router>
   );
 }
