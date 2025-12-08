@@ -6,7 +6,7 @@ import { useUsuarios } from '../hooks/useDatos';
 import '../styles/Dashboard.css';
 
 export const PanelMedico = () => {
-  const { usuario } = useAutenticacion();
+  const { usuario, actualizarUsuario } = useAutenticacion();
   const { obtenerTurnosPorMedico, cancelarTurno, cambiarDisponibilidad, estaDisponible } = useTurnos();
   const { actualizarObra } = useUsuarios();
   const [turnos, setTurnos] = useState([]);
@@ -55,11 +55,11 @@ export const PanelMedico = () => {
       return;
     }
     actualizarObra(usuario?.id, nuevaObra, motivoCambioObra);
+    actualizarUsuario({ obraSocial: nuevaObra });
     setMensajeExito('Obra social actualizada correctamente.');
     setMostrarCambioObra(false);
     setMotivoCambioObra('');
     setTimeout(() => setMensajeExito(''), 3000);
-    window.location.reload();
   };
 
   return (

@@ -29,8 +29,14 @@ export const ProveedorAutenticacion = ({ children }) => {
     localStorage.setItem('usuario', JSON.stringify(datosUsuario));
   };
 
+  const actualizarUsuario = (datosActualizados) => {
+    const usuarioActualizado = { ...usuario, ...datosActualizados };
+    setUsuario(usuarioActualizado);
+    localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
+  };
+
   return (
-    <AuthContext.Provider value={{ usuario, iniciarSesion, cerrarSesion, registrarse, cargando }}>
+    <AuthContext.Provider value={{ usuario, iniciarSesion, cerrarSesion, registrarse, actualizarUsuario, cargando }}>
       {children}
     </AuthContext.Provider>
   );

@@ -76,7 +76,7 @@ const descargarPDF = (turno) => {
 
 export const PanelPaciente = () => {
   const navegar = useNavigate();
-  const { usuario } = useAutenticacion();
+  const { usuario, actualizarUsuario } = useAutenticacion();
   const { agregarTurno, obtenerTurnosPorPaciente, verificarDisponibilidad, obtenerHorariosDisponibles } = useTurnos();
   const { actualizarObra } = useUsuarios();
   const medicos = useMedicos();
@@ -170,12 +170,11 @@ export const PanelPaciente = () => {
       return;
     }
     actualizarObra(usuario?.id, nuevaObra, motivoCambioObra);
+    actualizarUsuario({ obraSocial: nuevaObra });
     setMensajeExito('Obra social actualizada correctamente.');
     setMostrarCambioObra(false);
     setMotivoCambioObra('');
     setTimeout(() => setMensajeExito(''), 3000);
-    // Recargar usuario o actualizar UI
-    window.location.reload();
   };
 
   return (
