@@ -5,6 +5,7 @@ import { useUsuarios } from '../hooks/useDatos';
 import { useFormulario } from '../hooks/useFormulario';
 import '../styles/Auth.css';
 
+// Componente para el registro de nuevos usuarios (pacientes y médicos)
 export const Registrarse = () => {
   const navegar = useNavigate();
   const { registrarse } = useAutenticacion();
@@ -25,13 +26,16 @@ export const Registrarse = () => {
       obraSocial: 'PAMI',
     },
     (valoresFormulario) => {
+      // Validación de todos los campos del formulario
       setErrorGlobal('');
       let hayErrores = false;
 
+      // Validar nombre
       if (!valoresFormulario.nombre.trim()) {
         establecerErrorCampo('nombre', 'El nombre es requerido');
         hayErrores = true;
       }
+      // Validar email y verificar que no esté registrado
       if (!valoresFormulario.email) {
         establecerErrorCampo('email', 'El correo es requerido');
         hayErrores = true;

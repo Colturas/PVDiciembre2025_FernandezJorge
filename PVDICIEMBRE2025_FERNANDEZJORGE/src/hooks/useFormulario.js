@@ -1,18 +1,20 @@
 import { useState } from 'react';
 
+// Hook personalizado para manejar el estado y validación de formularios
 export const useFormulario = (valoresIniciales, alEnviar) => {
   const [valores, setValores] = useState(valoresIniciales);
   const [errores, setErrores] = useState({});
   const [tocados, setTocados] = useState({});
   const [enviando, setEnviando] = useState(false);
 
+  // Actualiza los valores del formulario cuando el usuario escribe
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setValores(prev => ({
       ...prev,
       [name]: value,
     }));
-    // Limpiar error cuando el usuario empieza a escribir
+    // Limpia los errores cuando el usuario comienza a escribir
     if (errores[name]) {
       setErrores(prev => ({
         ...prev,
@@ -21,6 +23,7 @@ export const useFormulario = (valoresIniciales, alEnviar) => {
     }
   };
 
+  // Marca un campo como tocado cuando pierde el foco
   const manejarDesenfoque = (e) => {
     const { name } = e.target;
     setTocados(prev => ({
@@ -29,6 +32,7 @@ export const useFormulario = (valoresIniciales, alEnviar) => {
     }));
   };
 
+  // Procesa el envío del formulario
   const manejarEnvio = async (e) => {
     e.preventDefault();
     setEnviando(true);
@@ -41,6 +45,7 @@ export const useFormulario = (valoresIniciales, alEnviar) => {
     }
   };
 
+  // Establece un error en un campo específico
   const establecerErrorCampo = (campo, error) => {
     setErrores(prev => ({
       ...prev,
@@ -52,6 +57,7 @@ export const useFormulario = (valoresIniciales, alEnviar) => {
     }));
   };
 
+  // Reinicia el formulario a su estado inicial
   const limpiarFormulario = () => {
     setValores(valoresIniciales);
     setErrores({});

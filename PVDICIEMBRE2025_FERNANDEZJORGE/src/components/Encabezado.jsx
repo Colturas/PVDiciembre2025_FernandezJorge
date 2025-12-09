@@ -2,13 +2,16 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import '../styles/Header.css';
 
+// Header de la aplicación con navegación y opciones de usuario
 export const Encabezado = () => {
   const navegar = useNavigate();
   const ubicacion = useLocation();
   const { usuario, cerrarSesion } = useAutenticacion();
 
+  // Verifica si está en la página de inicio
   const esEnInicio = ubicacion.pathname === '/';
 
+  // Cierra la sesión y redirige al inicio
   const manejarCierreSesion = () => {
     cerrarSesion();
     navegar('/');
@@ -17,6 +20,7 @@ export const Encabezado = () => {
   return (
     <header className="header">
       <div className="header-container">
+        {/* Sección de logo */}
         <div className="logo-section" onClick={() => navegar('/')} style={{ cursor: 'pointer' }}>
           <div className="logo-icon">+</div>
           <div className="logo-text">
@@ -25,7 +29,9 @@ export const Encabezado = () => {
           </div>
         </div>
 
+        {/* Menú de navegación */}
         <nav className="nav-menu">
+          {/* Menú para usuarios autenticados */}
           {usuario ? (
             <div className="user-menu">
               <span className="user-name">Bienvenido, {usuario.nombre}</span>
@@ -47,6 +53,7 @@ export const Encabezado = () => {
               )}
             </div>
           ) : (
+            // Menú para usuarios sin autenticar
             <div className="auth-menu">
               <button onClick={() => navegar('/iniciar-sesion')} className="nav-btn">
                 Iniciar Sesión

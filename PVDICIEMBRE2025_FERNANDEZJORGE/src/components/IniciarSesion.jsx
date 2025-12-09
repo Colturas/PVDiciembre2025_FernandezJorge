@@ -5,6 +5,7 @@ import { useUsuarios } from '../hooks/useDatos';
 import { useFormulario } from '../hooks/useFormulario';
 import '../styles/Auth.css';
 
+// Componente de login para pacientes y médicos
 export const IniciarSesion = () => {
   const navegar = useNavigate();
   const { iniciarSesion } = useAutenticacion();
@@ -16,19 +17,23 @@ export const IniciarSesion = () => {
     (valoresFormulario) => {
       setErrorGlobal('');
       
+      // Validar que el email no esté vacío
       if (!valoresFormulario.email) {
         establecerErrorCampo('email', 'El correo es requerido');
         return;
       }
+      // Validar formato de email
       if (!/\S+@\S+\.\S+/.test(valoresFormulario.email)) {
         establecerErrorCampo('email', 'El correo no es válido');
         return;
       }
+      // Validar que la contraseña no esté vacía
       if (!valoresFormulario.contrasena) {
         establecerErrorCampo('contrasena', 'La contraseña es requerida');
         return;
       }
 
+      // Validar credenciales y redirigir según el tipo de usuario
       const usuario = validarInicioSesion(valoresFormulario.email, valoresFormulario.contrasena);
       if (usuario) {
         iniciarSesion(usuario);

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+// Listado de médicos disponibles en el sistema
 const MEDICOS = [
   {
     id: 1,
@@ -24,7 +25,7 @@ const MEDICOS = [
   },
 ];
 
-
+// Horarios disponibles en turno de mañana
 const TURNOS_MATUTINOS = [
   '09:00',
   '09:30',
@@ -35,6 +36,7 @@ const TURNOS_MATUTINOS = [
   '12:00',
 ];
 
+// Horarios disponibles en turno de tarde
 const TURNOS_VESPERTINOS = [
   '14:00',
   '14:30',
@@ -51,7 +53,7 @@ export const useMedicos = () => {
   const [medicos, setMedicos] = useState([]);
 
   useEffect(() => {
-    // Cargar médicos desde usuarios registrados
+    // Carga la lista de médicos desde los usuarios registrados
     const usuariosGuardados = localStorage.getItem('usuarios') || localStorage.getItem('users');
     if (usuariosGuardados) {
       const usuarios = JSON.parse(usuariosGuardados);
@@ -67,6 +69,7 @@ export const useTurnosMatutinos = () => {
   const [turnosDisponibles, setTurnosDisponibles] = useState([]);
 
   useEffect(() => {
+    // Combina horarios de mañana y tarde
     const todosLosTurnos = [...TURNOS_MATUTINOS, ...TURNOS_VESPERTINOS];
     setTurnosDisponibles(todosLosTurnos);
   }, []);
@@ -79,18 +82,19 @@ export const useUsuarios = () => {
   const [inicializado, setInicializado] = useState(false);
 
   useEffect(() => {
-    // Intentar cargar desde 'usuarios' (nuevo) o 'users' (viejo)
+    // Recupera la lista de usuarios desde localStorage
     const usuariosGuardados = localStorage.getItem('usuarios') || localStorage.getItem('users');
     if (usuariosGuardados) {
       setUsuarios(JSON.parse(usuariosGuardados));
     } else {
-      // Inicializar con usuarios por defecto
+      // Si es la primera vez, carga con los usuarios por defecto
       setUsuarios(USUARIOS_POR_DEFECTO);
       localStorage.setItem('usuarios', JSON.stringify(USUARIOS_POR_DEFECTO));
     }
     setInicializado(true);
   }, []);
 
+  // Agrega un nuevo usuario al sistema
   const agregarUsuario = (datosUsuario) => {
     const nuevosUsuarios = [...usuarios, datosUsuario];
     setUsuarios(nuevosUsuarios);
@@ -98,23 +102,28 @@ export const useUsuarios = () => {
     return datosUsuario;
   };
 
+  // Busca un usuario por su email
   const buscarUsuarioPorEmail = (email) => {
     return usuarios.find(u => u.email === email);
   };
 
+  // Valida que un DNI no esté registrado
   const buscarUsuarioPorDNI = (dni) => {
     return usuarios.find(u => u.dni === dni);
   };
 
+  // Valida que un teléfono no esté registrado
   const buscarUsuarioPorTelefono = (telefono) => {
     return usuarios.find(u => u.telefono === telefono);
   };
 
+  // Verifica credenciales de inicio de sesión
   const validarInicioSesion = (email, contrasena) => {
     const usuario = usuarios.find(u => u.email === email && u.contrasena === contrasena);
     return usuario || null;
   };
 
+  // Actualiza la obra social de un usuario con registro del cambio
   const actualizarObra = (usuarioId, nuevaObra, motivo) => {
     const usuariosActualizados = usuarios.map(u => 
       u.id === usuarioId 
