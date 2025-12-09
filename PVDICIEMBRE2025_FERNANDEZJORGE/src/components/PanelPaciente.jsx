@@ -98,7 +98,9 @@ export const PanelPaciente = () => {
   const manejarSeleccionMedico = (medico) => {
     setMedicoSeleccionado(medico);
     setHorarioSeleccionado(null);
-    const fecha = new Date().toLocaleDateString('es-AR');
+    const fechaSiguiente = new Date();
+    fechaSiguiente.setDate(fechaSiguiente.getDate() + 1);
+    const fecha = fechaSiguiente.toLocaleDateString('es-AR');
     const horariosDisp = obtenerHorariosDisponibles(medico.email, fecha, turnosMatutinos);
     setHorariosDisponibles(horariosDisp);
   };
@@ -109,7 +111,9 @@ export const PanelPaciente = () => {
 
   const manejarAgendamiento = () => {
     if (medicoSeleccionado && horarioSeleccionado) {
-      const fecha = new Date().toLocaleDateString('es-AR');
+      const fechaSiguiente = new Date();
+      fechaSiguiente.setDate(fechaSiguiente.getDate() + 1);
+      const fecha = fechaSiguiente.toLocaleDateString('es-AR');
       
       // Verificar nuevamente disponibilidad antes de agendar
       if (!verificarDisponibilidad(medicoSeleccionado.email, fecha, horarioSeleccionado)) {
@@ -241,7 +245,7 @@ export const PanelPaciente = () => {
 
                 {medicoSeleccionado && (
                   <div className="form-group">
-                    <label>Selecciona una Hora (Mañana - {new Date().toLocaleDateString('es-AR')})</label>
+                    <label>Selecciona una Hora (Próximo día - {(() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toLocaleDateString('es-AR'); })()})</label>
                     <div className="slots-grid">
                       {horariosDisponibles.length > 0 ? (
                         horariosDisponibles.map(horario => (
@@ -268,7 +272,7 @@ export const PanelPaciente = () => {
                     <p><strong>Médico:</strong> {medicoSeleccionado.nombre}</p>
                     <p><strong>Especialidad:</strong> {medicoSeleccionado.especialidad}</p>
                     <p><strong>Experiencia:</strong> {medicoSeleccionado.experiencia} años</p>
-                    <p><strong>Fecha:</strong> {new Date().toLocaleDateString('es-AR')}</p>
+                    <p><strong>Fecha:</strong> {(() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toLocaleDateString('es-AR'); })()}</p>
                     <p><strong>Hora:</strong> {horarioSeleccionado}</p>
                     <button onClick={manejarAgendamiento} className="btn-primary">
                       Confirmar Turno

@@ -24,56 +24,6 @@ const MEDICOS = [
   },
 ];
 
-const USUARIOS_POR_DEFECTO = [
-  {
-    id: 1,
-    nombre: 'Juan García',
-    email: 'dr.juan@medicare.com',
-    contrasena: '123456',
-    tipoUsuario: 'medico',
-    dni: '12345678',
-    telefono: '+54 9 11 5555-1111',
-    especialidad: 'Cardiología',
-    obraSocial: 'PAMI',
-    creadoEn: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    nombre: 'María López',
-    email: 'dra.maria@medicare.com',
-    contrasena: '123456',
-    tipoUsuario: 'medico',
-    dni: '12345679',
-    telefono: '+54 9 11 5555-2222',
-    especialidad: 'Neurología',
-    obraSocial: 'ISJ',
-    creadoEn: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    nombre: 'Carlos Rodríguez',
-    email: 'dr.carlos@medicare.com',
-    contrasena: '123456',
-    tipoUsuario: 'medico',
-    dni: '12345680',
-    telefono: '+54 9 11 5555-3333',
-    especialidad: 'Dermatología',
-    obraSocial: 'OSDE',
-    creadoEn: new Date().toISOString(),
-  },
-  {
-    id: 4,
-    nombre: 'Juan Pérez',
-    email: 'juan.perez@gmail.com',
-    contrasena: '123456',
-    tipoUsuario: 'paciente',
-    dni: '30123456',
-    telefono: '+54 9 11 6666-1111',
-    edad: 35,
-    obraSocial: 'PAMI',
-    creadoEn: new Date().toISOString(),
-  },
-];
 
 const TURNOS_MATUTINOS = [
   '09:00',
@@ -83,6 +33,18 @@ const TURNOS_MATUTINOS = [
   '11:00',
   '11:30',
   '12:00',
+];
+
+const TURNOS_VESPERTINOS = [
+  '14:00',
+  '14:30',
+  '15:00',
+  '15:30',
+  '16:00',
+  '16:30',
+  '17:00',
+  '17:30',
+  '18:00',
 ];
 
 export const useMedicos = () => {
@@ -105,7 +67,8 @@ export const useTurnosMatutinos = () => {
   const [turnosDisponibles, setTurnosDisponibles] = useState([]);
 
   useEffect(() => {
-    setTurnosDisponibles(TURNOS_MATUTINOS);
+    const todosLosTurnos = [...TURNOS_MATUTINOS, ...TURNOS_VESPERTINOS];
+    setTurnosDisponibles(todosLosTurnos);
   }, []);
 
   return turnosDisponibles;
